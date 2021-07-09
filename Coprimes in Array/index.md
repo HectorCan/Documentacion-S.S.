@@ -1,6 +1,6 @@
 # How to solve Coprimes in array
 
-![You can't go forward](./imgs/hit_the_wall.png)
+![You can't go forward](./imgs/goal1.jpg)
 
 You seems to have hit the wall, but don't worry, this document only exists to help you break the wall.
 
