@@ -62,17 +62,20 @@ fgets(sa, ML, stdin);
 To search the string, there are a few considerations:
 
 1. You can be storing "\n" in your strings, keep only the string, and avoid further problems.
-2. The search is case sensitive, so world != WORLD.
-3. You must only return the first occurrence.
+2. At the end of each string there is Null Character
+3. The search is case sensitive, so world != WORLD.
+4. You must return only the first occurrence.
 
 A simple search algorithm would be:
 
-1. Get the `length` of _**SB**_.
-2. For each `index` of _**SA**_:
-    1. Create a string _**SC**_ from _**SA**_ in position `index` to `index` + `length`.
+1. Get the `length A` of _**SA**_.
+2. Get the `length B` of _**SB**_.
+3. if `length A` is lower than `
+4. For each `index` of _**SA**_:
+    1. Create a string _**SC**_ from _**SA**_ in position `index` to `index` + `length B`.
     2. Check if _**SB**_ is the same as _**SC**_.
     3. If so, return `index`
-3. Return -1.
+5. Return -1.
 
 But you are free to create your own algorithm.
 
