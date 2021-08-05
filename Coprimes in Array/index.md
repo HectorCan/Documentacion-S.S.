@@ -52,7 +52,7 @@ So, our given problem is to get the factor of a number. But how are we gonna get
 
 In many programming languages, for not saying all of them, we have an operator called *modulo*, the expression is the following:
 
-```
+```c
 int remainder = 5 % 3; // 2
 ```
 
@@ -60,7 +60,7 @@ int remainder = 5 % 3; // 2
 
 Maybe you're asking why this instruction is important. It's because we are going to need this instruction to get the factors of a number. There are many ways to solve this problem, the brute force way or the efficent way. Both of them, use the following rule with the modulo operator:
 
-```
+```c
 // If the number has no remainder when is divided by iterator
 if (number % iterator == 0) {
     // Iterator is a factor of the number
@@ -75,22 +75,19 @@ But the previous fragment of code, will only validate one number, we need to get
 
 The algorithm to get the factors is the following:
 
-1. First of all we can exclude the 1, we already know that any number can be divided by 1, so it's something that we are ommiting.
-2. If 1 is excluded we start with an iterator of 2.
-3. Check if number >= iterator * iterator: **(?)**
-    1. Check if the number have no remainder when it's divided by iterator
-        1. Yes
-            1. Save the iterator as a factor
-            2. Number is the division of number between iterator.
-            3. Repeat step 3.
-
-        2. Not
-            1. Increment our iterator by 1.
-            2. Repeat step 3.
-4. Save the iterator as a factor.
+1. We start with $iterator=2$, $number=8$ and $lower$ being the lowest number to validate, on this case as we are only comparing 8, it will be $lower = 8$.
+2. While $lower >= iterator^2$
+    1. If $(number/iterator)$ has remainder of $0$
+        1. Save the $iterator$ as a **factor**.
+        2. $number = number / iterator$.
+        3. Repeat step 2.1
+    2. If $remainder > 0$
+        1. $iterator = iterator + 1$.
+        2. Repeat step 2.
+3. Save the $iterator$ as a **factor**.
 
 ***Notes***:
-1. Why *iterator * iterator*, it's only a validation that will determine if there is any factors to get, this is an efficient way.
+1. Why $lower >= iterator^2$?, it's because it will reduce the quantity of numbers that are not factor of the number.
 
 Once you have coded the algorithm, you can solve how to determine the coprimes.
 
@@ -107,9 +104,9 @@ Now, you can deal with the current problem:
 As a partner in this track, I will mentor you to consider the following to solve this problem.
 
 1. You have received all the info that you need to make an efficient solution.
-2. You don't need to store all the factors in memory.
-3. Think it in other way, we can check if the iterator is factor of the set of numbers?.
-    1. Remember that 8 can be divided 3 times by 2, but 16 can be divided 4 times by 2, how can you validate this before incrementing the iterator to 3.
-    2. Once you have encountered an iterator that is factor of the set, you can finish the search.
+2. You don't need to store all the factors in memory. _Remember: You must determine if they are coprime or not_.
+3. The algorithm that was defined to get the factors of a number can be modified to check if a set of numbers have a common factor, how? think in a loop. However there is additional considerations:
+    1. 8 can be divided by 2, 3 times; but 6 can only be divided 1 time. You must only increment $iterator$ when all the numbers in set have $remainder > 0$
+    2. Also, if you find a factor for all the numbers you can stop.
 
-Well, now, I can only say Good Luck!!!
+Good Luck!!!

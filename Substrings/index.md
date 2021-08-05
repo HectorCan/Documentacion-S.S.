@@ -1,8 +1,8 @@
 # Instructions
 
-**Problem**: Given two strings _**SA**_ and _**SB**_, make a function that return the position of _**SA**_ where the string _**SB**_ is substring of _**SA**_ for the first time, or -1 in other case.
+**Problem**: Given two strings $S_a$ and $S_b$, make a function that return the position where the string $S_b$ is substring of $S_a$ for the first time, or -1 in other case.
 
-**Note**: The function must be case sensitive.
+_The function must be case sensitive._
 
 **Definition**:
 ```
@@ -11,13 +11,13 @@ A string is considered as a substring if all their elements are in other string 
 
 **Example**:
 
-Given the following string, let's call it _**SA**_:
+Given the following string, let's call it $S_a$:
 
 ```
 Hello world!
 ```
 
-and the following string _**SB**_:
+and the following string $S_b$:
 
 ```
 world
@@ -29,17 +29,17 @@ world
 | 0 | 1 | 2 | 3 | 4 | 5 |`6`| 7 | 8 | 9 | 10 | 11 |
 
 
-We can tell that _**SB**_ is a substring of _**SA**_, and it starts in position 6.
+We can tell that $S_b$ is a substring of $S_a$, and it starts in position 6.
 
 ## Decompose
 
-Sure you are wondering how I can get the position where _**SB**_ is located in _**SA**_.
+Sure you are wondering how I can get the position where $S_b$ is located in $S_a$.
 
 The algorithm is the following:
 
-1. Get the complete string (_**SA**_)
-2. Get the string to search (_**SB**_)
-3. Search _**SB**_ in _**SA**_.
+1. Get the complete string $S_a$
+2. Get the string to search $S_b$
+3. Search $S_b$ in $S_a$.
     1. If found return the position of start.
     2. If not found return -1.
 
@@ -59,23 +59,26 @@ scanf("%s", &sa);
 fgets(sa, ML, stdin);
 ```
 
-To search the string, there are a few considerations:
+You need to consider the following:
 
-1. You can be storing "\n" in your strings, keep only the string, and avoid further problems.
-2. At the end of each string there is Null Character
-3. The search is case sensitive, so world != WORLD.
-4. You must return only the first occurrence.
+1. Avoid null characters at the end of string.
+2. Remember is case sensitive so World != wOrLD.
+3. Remember return the first ocurrency.
 
 A simple search algorithm would be:
 
-1. Get the `length A` of _**SA**_.
-2. Get the `length B` of _**SB**_.
-3. if `length A` is lower than `
-4. For each `index` of _**SA**_:
-    1. Create a string _**SC**_ from _**SA**_ in position `index` to `index` + `length B`.
-    2. Check if _**SB**_ is the same as _**SC**_.
-    3. If so, return `index`
-5. Return -1.
+1. $LS_A = length$ of $S_a$
+2. $LS_B = length$ of $S_b$
+3. $i = 0, j= 0$
+3. While $i < LS_A$
+    1. If `character[i]` $S_a$ equals `character[j]` in $S_b$.
+        1. Increment $j$ by 1.
+    2. If not equals
+        1. Set $j = 0$
+    3. Increment $i$ by 1.
+    4. If all characters in $S_b$ were found
+        1. return $i - j$ 
+4. Return $-1$.
 
 But you are free to create your own algorithm.
 
