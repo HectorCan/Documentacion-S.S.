@@ -70,19 +70,25 @@ C has is own reserved word *struct*, that is used to represent a record of somet
 
 ```c
 // Defining Books 
-struct Books {
+#include <stdio.h>
+
+typedef struct {
     char title[50];
     char author[50];
-    char subject[100];
-};
+    char subject[50];
+} Book;
 
-int main () {
+using namespace std;
+
+int main() {
     // Using them as a type of variable.
-    struct Books HarryPotter;
-    
-    HarryPotter.title = "Harry Potter";
-    HarryPotter.author = "J. K. Rowling";
-    HarryPotter.subject = "Fantasy";
+    Book hp;
+
+    scanf("%s", hp.title);
+    scanf("%s", hp.author);
+    scanf("%s", hp.subject);
+
+    return 0;
 }
 ```
 
