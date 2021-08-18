@@ -101,7 +101,7 @@ void push(Stack *sp, char *id, float x, float y) {
 
 ### Objective 4. Extract a TPoint from the Stack
 
-You must know this, but a Stack implements an structure called **FILO** (**F**irst **I**nput **L**ast **O**utput), so the first item will always be the las one extracted.
+You must know this, but a Stack implements an structure called **LIFO** (**L**ast **I**nput **F**irst **O**utput), so the first item will always be the las one extracted.
 
 For this objective you must complete the following function:
 
