@@ -83,6 +83,8 @@ For this mission you need to complete the following function:
  */
 void initialize(Stack *sp, int size) {
     // Set the size of the array of TPoints allocated in Stack.
+    // - In this function you only initialize what is inside your stack
+    // -  (points, index, max_size), not the variable sp
 }
 ```
 
