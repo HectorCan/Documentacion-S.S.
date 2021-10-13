@@ -1,129 +1,246 @@
-# Instructions
+# How to Solve - Structured Stacks
 
-## Mission
+## Mission 5 - Create a Stack using ADT
 
-Make a program that use the structures and functions of Stacks ADT to manage a set of point in the bidimensional plane.
+Make a program that uses the structures and functions of Stacks ADT to manage a set of points in the bidimensional plane.
 
 The points entity must have the following structure:
 
 ```json
-// TPoint
 {
     "ID": "P01",
-    "x": 1.3,
-    "y": 2.0
+    "x": 1.333,
+    "y": 1.333,
+    "isValid": true,
 }
 ```
 
-While the stack entity must have the following structure:
-
+While the Stack entity must have the following structure:
 ```json
-// Stack
 {
-    "points": [/* TPoint, TPoint, ..., TPoint */]
+    "size": 10,
+    "points": [],
+    "top": -1
 }
 ```
 
-If the Stack is full or empty, it must print the following messages:
+If the Stack is **Full** or **Empty**, it must print the following messages:
 
-* Stack is full
-* Stack is empty
+* Stack is Full
+* Stack is Empty
 
 ## Objectives
 
-### Objective 1. Make a Structure
+So you have surrender and want to read the hints to solve this coding challenge. Don't be discouraged, remember that no one was able to solve his first coding challenges successfully.
 
-First of all you need to make an structure, as intended we know that the **Stack Structure depends on the TPoint Structure**, so we can't make a Stack Structure without the TPoint Structure.
+Let's start.
 
-Remember, a structure can be defined as follows:
+Margot wants to open a library, where she sells first the newest books, and let the old ones to be selled at the final.
+
+(Yeah, kinda strange library, but don't worry, personally you will be doing some garbage work, because the client requested it).
+
+For this library we will be using the following structures, let's keep it simple to be able to **get to the point**.
+
+```json
+{// Book
+    "code": 1,
+}
+```
+
+```json
+{// Library
+    "books": [],
+    "size": 10
+}
+```
+
+### Objective 1. Learning Data Structures.
+
+First we need to convert the previous structure to code, so it will be like:
 
 ```c++
-#include <stdio.h>
-
 typedef struct {
-    char title[50];
-    char author[50];
-    char subject[50];
+    int code;
+    bool isValid;
 } Book;
 
-using namespace std;
+typedef struct {
+    int size;
+    Book *books;
+    int top;
+} Library;
+```
+**STOP**, you have noticed? we added in each object extra features.
 
+The "isValid" feature in the Book, it's because the Stack pop function, must return a value, even if the Stack is empty, this "isValid" flag will tell us, if the book retrieved is one that was added or was created to fill the library.
+
+The "top" feature in the Library, will tell us what position has the latest book in the Stack, and will be used also to determine if a stack is full or empty.
+
+### Objective 2. Initializing our Stack
+
+The first thing our code need is to initialize our structure, so our main function will be like:
+
+```c++
+#define MAX 10;
+
+int main()
+{
+    Library lib;
+    lib.elements = new Book[MAX];
+}
+```
+
+And that's all folks!
+
+### Objective 3. Let's clean the library
+
+What is a Library if it is not clean? but how we clean a library structure? Well, if you assist to your classes and take notes you will notice that is very simple...
+
+```c++
+void ClearLibrary(Library *s)
+{
+    s->top  = -1;  // Throw all your books to garbage
+    s->size = MAX; // How many books can be stored?
+}
+```
+
+### Objective 4. Passing data by reference.
+
+You must be trying to test if until now you are capable of getting all working, but you must be seeing that the following line is not helping:
+
+```c++
 int main() {
-    // Using them as a type of variable.
-    Book hp;
-
-    scanf("%s", hp.title);
-    scanf("%s", hp.author);
-    scanf("%s", hp.subject);
-
-    return 0;
+    // ...
+    ClearLibrary(lib);
+    // ...
 }
 ```
 
-#### Tasks to fulfill the Objective
+I will tell you why, the function ClearLibrary expects a Library s to be passed by reference, but in the previous code we are passing a copy of the library, so it doesn't match what the functions expects.
 
-1. Create a TPoint Structure
-2. Using TPoint Structure create a Stack Structure
-    1. **Note**: Create many TPoint Structure variables to test that you stack is storing TPoint's correctly.
-    2. **Recommendation**: It is a good idea to keep in mind how it works a Stack. It has a maximum size, but it can have less items, so it's a good idea to keep a track of the maximum and how many items are in the list (max_size and count), so further functions can use full advantage of this.
+A quite easy solution will be:
+```c++
+int main() {
+    // ...
+    ClearLibrary(&lib);
+    // ...
+}
+```
 
-Once you have TPoint and Stack Structure, you are ready to start with the following step.
+With that & we are telling to pass the library as reference, so any changes made to the library will be global. 
 
-### Objective 2. Initialize your stack
+Be aware of this, passing by reference and changing any value will be kept forever, even if you don't return anything. If you pass by value and make a change on that value, it will not kept the change, unless you return and update the parameter.
 
-Remember, you need that you stack stores many TPoints, the maximum quantity will be defined as an input.
+### Objective 5. I want to store HARRY POTTER AND THE GOBLET OF FIRE!
 
-For this mission you need to complete the following function:
+#### Step 1. We need to get the book.
+
+We will need to create a Book element to store the data of Harry Potter.
+
+And that is quite easy task, you will need to create a function that stores all your parameters into a book and return the book.
 
 ```c++
-/**
- * Function to initialize an stack
- * @param Stack *sp
- * @param int size
- */
-void initialize(Stack *sp, int size) {
-    // Set the size of the array of TPoints allocated in Stack.
-    // - In this function you only initialize what is inside your stack
-    // -  (points, index, max_size), not the variable sp
+Book createBook(int code, bool isValid)
+{
+    Book elem;
+    elem.code = code;
+    elem.isValid = isValid;
+    return elem;
 }
 ```
 
-### Objective 3. Create a TPoint and add it to the Stack
+#### Step 2. My Library is Full?
 
-For the moment you have an empty stack, so we need to create a TPoint and add it to the Stack, in this mission you will need to complete the following function:
+Before we store the book we need to check if our library can store another book.
 
 ```c++
-void push(Stack *sp, char *id, float x, float y) {
-    // Step 1. Create a TPoint using id, x and y.
-    // Step 2. Insert TPoint in Stack
-        
-    // Consider what happens if the stack has reached its limit
+bool isFull(Library s) {
+    return s.top >= (s.size - 1);
 }
 ```
 
-### Objective 4. Extract a TPoint from the Stack
+For that you need to check if you are not at the limit of storage.
 
-You must know this, but a Stack implements an structure called **LIFO** (**L**ast **I**nput **F**irst **O**utput), so the first item will always be the las one extracted.
+#### Step 3. Store my Book!
 
-For this objective you must complete the following function:
+Finally, after a long journey we can store Harry Potter! but how?
 
 ```c++
-void pop(Stack *sp) {
-    // Step 1. Get the last item added to the stack
-    // Step 2. Remove it from the stack.
-    // Step 3. Print the item.
-
-    // Consider what happens if the stack is empty.
+bool push(Library *s, Book elem)
+{
+    if (isFull(*(s))) {
+        return false;
+    }
+    
+    s->books[++s->top] = elem;
+    return true;
 }
 ```
 
-### Objective 5. We need Control!
+Wait! why *(s) was sended to the isFull function?, well that because isFull expects a library to be passed by value, but our push function has a library being passed by reference, so we will need a way to convert that reference into a copy, and that is pointing the reference.
+
+And what does the ++s->top operator mean?, well operator for adding or subtracting have two ways.
+
+```c++
+int main() {
+    int i = 0;
+    int j = i++; // Will return the value and then add 1
+    // j will be 0, i will be 1
+
+    i = 0;
+    ++i; // Will add 1 and then return the value
+    // i will be 1
+}
+```
+
+### Objective 6. Can we return the newest book?
+
+#### Step 1. My library is empty!!!
+
+The first thing you want to do before returning the last book, is to know if you have books. [Do it!](https://www.youtube.com/watch?v=ZXsQAXx_ao0)
+
+```c++
+bool isEmpty(Library s)
+{
+    return true; // You can do it! Do it!
+    // For further info of what validation you must do, remember
+    // You have a top, that indicates the position of the last book
+    // ClearLibrary has the value for an empty library.
+}
+```
+
+#### Step 2. We have a problem... Houston
+
+The pop functions as said before must return an empty book, there are many ways for this.
+
+1. In the initialization of the books parameter in the Library, we could create 10 books with code = 0 and isValid = false. So that we can always return the first one.
+2. (Our approach) is to create an empty book and return that.
+
+You can try the first one if you like, but this guide will not provide more information to getting all working on that approach.
+
+```c++
+Book pop(Library *s) {
+    if (isEmpty(*(s))) {
+        return createBook(0, false);
+    }
+
+    return s->books[s->top--];
+}
+```
+
+**Remember** we have explained what does mean the instructions i++ and ++i, the same logic is applied for the i-- and --i
+
+### Objective 7. We need Control!
 
 As you may noticed, you are testing individual functions, we need to control what we want to do (add, remove, initialize, exit). So we need to add a little control to our main function, this time will be on my count the control logic, complement with all your work!
 
 ```c++
-int main() {
+#include <stdio.h>
 
+// ... functions, headers, etc.
+
+int main() {
+    // ... initialization
     int order;
 
     do {
@@ -131,15 +248,16 @@ int main() {
         scanf("%d", &order);
 
         switch (order) {
-            case 1: // Use Initialize()
-                // size = Get from user
+            case 1: // clear library
                 break;
-            case 2: // Use Push()
-                // ID = "ID" + index of item (Generate yourself)
-                // x = Get from user
-                // y = Get from user
+            case 2: // push
+                // retrieve info from user input
+                // insert
+                // was correctly inserted?
                 break;
-            case 3: // Use Pop()
+            case 3: // pop
+                // retrieve last book
+                // display the book
                 break;
             default: // print "Unknown Order"
                 break;
@@ -150,6 +268,4 @@ int main() {
 }
 ```
 
-Once it's done.
-
-Congratulations you have finished all the Stack Objectives!
+Congratulations! now you can impress your crush with your new knowledge! [Please don't](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2F736x%2Fdd%2F8c%2F5a%2Fdd8c5a99031f8bd27cba078f91ee2827--wtf-face-no-meme.jpg&f=1&nofb=1)
