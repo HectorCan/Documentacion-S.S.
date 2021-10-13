@@ -86,7 +86,7 @@ The first thing our code need is to initialize our structure, so our main functi
 int main()
 {
     Library lib;
-    lib.elements = new Book[MAX];
+    lib.books = new Book[MAX];
 }
 ```
 
