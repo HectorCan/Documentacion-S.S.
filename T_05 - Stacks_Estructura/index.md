@@ -29,17 +29,34 @@ If the Stack is **Full** or **Empty**, it must print the following messages:
 * Stack is Full
 * Stack is Empty
 
+## Review - Stacks
+
+What are stacks, how they work?
+
+An Stack is a pile of objects, for example think that you have a pile of books.
+
+![Stack](./img/stack.png)
+
+If you want to read the book that is at the bottom you must dispatch the ones that are in the top.
+If you want to read the last book in the pile, you only need to dispatch the last book.
+
+![POP](./img/pop.png)
+
+Also if you want to insert a book in the pile, you need to put it at the top
+
+![PUSH](./img/push.png)
+
 ## Objectives
 
 So you have surrender and want to read the hints to solve this coding challenge. Don't be discouraged, remember that no one was able to solve his first coding challenges successfully.
 
 Let's start.
 
-Margot wants to open a library, where she sells first the newest books, and let the old ones to be selled at the final.
+Margot wants to open a Stack Library, where she sells first the newest books, and let the old ones to be selled at the final.
 
-(Yeah, kinda strange library, but don't worry, personally you will be doing some garbage work, because the client requested it).
+(Yeah, kinda strange Stack Library, but don't worry, personally you will be doing some garbage work, because the client requested it).
 
-For this library we will be using the following structures, let's keep it simple to be able to **get to the point**.
+For this Stack Library we will be using the following structures, let's keep it simple to be able to **get to the point**.
 
 ```json
 {// Book
@@ -48,7 +65,7 @@ For this library we will be using the following structures, let's keep it simple
 ```
 
 ```json
-{// Library
+{// StackLibrary
     "books": [],
     "size": 10
 }
@@ -68,13 +85,13 @@ typedef struct {
     int size;
     Book *books;
     int top;
-} Library;
+} StackLibrary;
 ```
 **STOP**, you have noticed? we added in each object extra features.
 
-The "isValid" feature in the Book, it's because the Stack pop function, must return a value, even if the Stack is empty, this "isValid" flag will tell us, if the book retrieved is one that was added or was created to fill the library.
+The "isValid" feature in the Book, it's because the Stack pop function, must return a value, even if the Stack is empty, this "isValid" flag will tell us, if the book retrieved is one that was added or was created to fill the StackLibrary.
 
-The "top" feature in the Library, will tell us what position has the latest book in the Stack, and will be used also to determine if a stack is full or empty.
+The "top" feature in the StackLibrary, will tell us what position has the latest book in the Stack, and will be used also to determine if a stack is full or empty.
 
 ### Objective 2. Initializing our Stack
 
@@ -85,22 +102,22 @@ The first thing our code need is to initialize our structure, so our main functi
 
 int main()
 {
-    Library lib;
-    lib.books = new Book[MAX];
+    StackLibrary lib;
 }
 ```
 
 And that's all folks!
 
-### Objective 3. Let's clean the library
+### Objective 3. Let's initialize the Stack Library
 
-What is a Library if it is not clean? but how we clean a library structure? Well, if you assist to your classes and take notes you will notice that is very simple...
+What is a Stack Library if it is not clean? but how we clean a Stack Library structure? Well, if you assist to your classes and take notes you will notice that is very simple...
 
 ```c++
-void ClearLibrary(Library *s)
+void ClearStackLibrary(StackLibrary *s, int size)
 {
     s->top  = -1;  // Throw all your books to garbage
-    s->size = MAX; // How many books can be stored?
+    s->books = new Book[size];
+    s->size = size; // How many books can be stored?
 }
 ```
 
@@ -111,23 +128,23 @@ You must be trying to test if until now you are capable of getting all working, 
 ```c++
 int main() {
     // ...
-    ClearLibrary(lib);
+    ClearStackLibrary(lib);
     // ...
 }
 ```
 
-I will tell you why, the function ClearLibrary expects a Library s to be passed by reference, but in the previous code we are passing a copy of the library, so it doesn't match what the functions expects.
+I will tell you why, the function ClearStackLibrary expects a StackLibrary s to be passed by reference, but in the previous code we are passing a copy of the stack library, so it doesn't match what the functions expects.
 
 A quite easy solution will be:
 ```c++
 int main() {
     // ...
-    ClearLibrary(&lib);
+    ClearStackLibrary(&lib);
     // ...
 }
 ```
 
-With that & we are telling to pass the library as reference, so any changes made to the library will be global. 
+With that & we are telling to pass the stack library as reference, so any changes made to the stack library will be global. 
 
 Be aware of this, passing by reference and changing any value will be kept forever, even if you don't return anything. If you pass by value and make a change on that value, it will not kept the change, unless you return and update the parameter.
 
@@ -149,12 +166,12 @@ Book createBook(int code, bool isValid)
 }
 ```
 
-#### Step 2. My Library is Full?
+#### Step 2. My Stack Library is Full?
 
-Before we store the book we need to check if our library can store another book.
+Before we store the book we need to check if our Stack Library can store another book.
 
 ```c++
-bool isFull(Library s) {
+bool isFull(StackLibrary s) {
     return s.top >= (s.size - 1);
 }
 ```
@@ -166,7 +183,7 @@ For that you need to check if you are not at the limit of storage.
 Finally, after a long journey we can store Harry Potter! but how?
 
 ```c++
-bool push(Library *s, Book elem)
+bool push(StackLibrary *s, Book elem)
 {
     if (isFull(*(s))) {
         return false;
@@ -177,7 +194,7 @@ bool push(Library *s, Book elem)
 }
 ```
 
-Wait! why *(s) was sended to the isFull function?, well that because isFull expects a library to be passed by value, but our push function has a library being passed by reference, so we will need a way to convert that reference into a copy, and that is pointing the reference.
+Wait! why *(s) was sended to the isFull function?, well that because isFull expects a StackLibrary to be passed by value, but our push function has a StackLibrary being passed by reference, so we will need a way to convert that reference into a copy, and that is pointing the reference.
 
 And what does the ++s->top operator mean?, well operator for adding or subtracting have two ways.
 
@@ -195,17 +212,17 @@ int main() {
 
 ### Objective 6. Can we return the newest book?
 
-#### Step 1. My library is empty!!!
+#### Step 1. My StackLibrary is empty!!!
 
 The first thing you want to do before returning the last book, is to know if you have books. [Do it!](https://www.youtube.com/watch?v=ZXsQAXx_ao0)
 
 ```c++
-bool isEmpty(Library s)
+bool isEmpty(StackLibrary s)
 {
     return true; // You can do it! Do it!
     // For further info of what validation you must do, remember
     // You have a top, that indicates the position of the last book
-    // ClearLibrary has the value for an empty library.
+    // ClearStackLibrary has the value for an empty StackLibrary.
 }
 ```
 
@@ -213,13 +230,13 @@ bool isEmpty(Library s)
 
 The pop functions as said before must return an empty book, there are many ways for this.
 
-1. In the initialization of the books parameter in the Library, we could create 10 books with code = 0 and isValid = false. So that we can always return the first one.
+1. In the initialization of the books parameter in the StackLibrary, we could create 10 books with code = 0 and isValid = false. So that we can always return the first one.
 2. (Our approach) is to create an empty book and return that.
 
 You can try the first one if you like, but this guide will not provide more information to getting all working on that approach.
 
 ```c++
-Book pop(Library *s) {
+Book pop(StackLibrary *s) {
     if (isEmpty(*(s))) {
         return createBook(0, false);
     }
@@ -248,7 +265,7 @@ int main() {
         scanf("%d", &order);
 
         switch (order) {
-            case 1: // clear library
+            case 1: // clear StackLibrary
                 break;
             case 2: // push
                 // retrieve info from user input
