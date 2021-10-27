@@ -128,7 +128,7 @@ You must be trying to test if until now you are capable of getting all working, 
 ```c++
 int main() {
     // ...
-    ClearStackLibrary(lib);
+    ClearStackLibrary(lib, 10);
     // ...
 }
 ```
@@ -139,7 +139,7 @@ A quite easy solution will be:
 ```c++
 int main() {
     // ...
-    ClearStackLibrary(&lib);
+    ClearStackLibrary(&lib, 10);
     // ...
 }
 ```
