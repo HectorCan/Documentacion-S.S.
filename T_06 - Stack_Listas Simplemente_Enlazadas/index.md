@@ -4,9 +4,6 @@
 
 Make a program that simulates a stack using Simply Linked Lists
 
-![Simple Linked List](./img/simple-linked-list.png)
-
-
 This mission is the same as the Mission 5, but we are going to face the challenge of changing from one structure to another.
 
 As a recap, we have the TPoint Structure as following:
@@ -22,197 +19,162 @@ As a recap, we have the TPoint Structure as following:
 
 We don't need any other structure, the difference is that in Mission 5 we use another structure as a controller for the Stack, but in this mission we only need the TPoint structure.
 
-### Objective 1 - Initializing the Stack
+### Exploration - Simply Linked Lists
 
-We need to create something similar to a Stack structure:
+What is a Simply LInked List? Well, we can look at the following image as a reference.
 
-```c++
-// First declare the structure that will store our data
-struct node {
-    int x;
+As you can see is a list of items that are connected only on **one way**, also the last item can be pointing to itself (as in the image) or to NULL.
 
-    // Remember this line is important, is what defines what is the following item
-    struct node *next;
-};
+![Simple Linked List](./img/SimplyLinkedList.jpg)
 
-// Secondly we declare another structure as a Stack
-typedef struct node *Stack;
+You can see this structure as the same way you can see an array, but the greater difference is that this structure of data can let us create dynamic arrays, in other manner of saying. We can create a list of 100, 200 or 300 elements without changing a single line of code.
 
-int main () {
-    // We declare myStack variable
-    Stack myStack = NULL;
+This connection is to say, which element is after which element, and with that connection we can handle the simply linked list, to remove or add any element.
 
-    return 0;
-}
-```
+But this interface has its limitations, as you will see while reading and in the following manuals.
 
-At this moment you must have made the corrections to save all the necessary information, and with the previous fragment of code, now you have a boilerplate of the Simply Linked Lists.
 
-### Objective 2. Next, please
+### Objective 1. Let's STRUCTure our stack of NODE
 
-We have the structure, now we need to put elements in the Stack, remember the logic for Simply Linked Lists
+For this example we will be working with nodes, the nodes will have the following structure:
 
 ```json
+{// node
+    "x": 1
+}
+```
+
+In C++ we will need to structure this data, also we need to structure in a way so we can simply link this node to another. So the result is the following code:
+
+```c++
+struct node {
+    int x;
+    node *next;
+};
+```
+
+Quite easy isn't?
+
+#### Pro-Coding Tip 101
+
+For this exercise, since the stack is dynamic, from one moment to another our stack can be full, this is because a computer have a limit on memory, if we add thousands and thousands of nodes, in one moment our code will fail since it will not be able to create a new node, so in the next objective we will create a node and validate the overflow of memory.
+
+Also since many internal functions are added on the standard namespace, it is possible that you don't want to write `std::some_function`, more disgusting if you have to write 100 times the sentence, so you can save some keystrokes using the following line of code:
+
+```c++
+using namespace std;
+```
+
+With this you can use cout or cin without writing `std::cout` or `std::cin`
+
+### Objective 2. Let's push a node.
+
+You must know that the push function returns an status, true or false, this status indicates if an element was inserted into the stack. We are working with dynamic stacks, so we can run out of memory, but to avoid our program from breaking itself, since it can have sensible data and we can't afford to lose that data, we need to try and catch the error.
+
+Our push function will be look like:
+
+```c++
+bool push(struct node *&stack, int x)
 {
-    "ID": "P01",
-    "x":  1,
-    "next": {
-        "ID": "P02",
-        "x":  2,
-        "next": null
-    }
-}
-```
+    try {
+        // Create the node
+        struct node *item = new node;
+        item->x = x;
+        item->next = item; // points to itself
 
-The flag `next` is pointing to another element. Also that element can be pointing to another or null. But we are not pointing directly to the data, we are pointing on the position where the data is stored.
+        if (stack == NULL) {
+            stack = item;
+        } else {
+            // We need to iterate over the elements to reach the end of the stack
+            struct node *iterator = stack;
 
-*Some prefer to point next to the same element, instead of null, because null can cause other problems.*
+            // If the following is not the same
+            while (iterator->next != iterator) {
+                iterator = iterator->next;
+            }
 
-We need to add a new point to the stack, for that we need to fill the following function:
-
-```c++
-void push(Stack &stack, int x) {
-    // Create a new node and push it to the stack
-}
-```
-
-That instruction is kind lame, and we need to deepen more to understand how to do that instruction.
-
-Firstly, we need to consider this:
-
-1. If the Stack is empty, then my element will be the stack
-2. If the Stack is not empty, then I need to iterate in each element until I can put the values at the end.
-
-But how can we iterate over a Stack?
-
-```c++
-
-// Why using & See comments below function (1)
-void iterator_example(Stack &stack) {
-    Stack iterator;
-
-    iterator = stack;
-
-    // While there is a element in next
-    while (iterator->next != iterator) {
-        // We make iterator the following element
-        iterator = iteraton->next;
-    }
-
-    // Once it's done, in this moment we are at the end
-}
-
-// Notes:
-// 1.- Why are we passing a variable with the &, and not with the *?
-// ---- Well, in some languages & is reserved to pass a data by 
-//      reference and not by value, so this means, any changes made in
-//      the function will be in the final information.
-// 2.- Pass by references is pointing to a index in memory, normally 
-//     functions receive a copy of the values and this is pass by value.
-```
-
-And how we add a value to an empty Stack?
-
-```c++
-void adding_values(Stack &stack, int x) {
-    // We create a new element
-    Stack item = new (struct node);
-
-    // We add the required values to the element
-    item->x = x;
-    item->next = item; // sentynel linked list
-
-    // If the stack is empty, we make the element our stack.
-    if (stack == NULL) {
-        stack = item;
-    }
-}
-```
-
-Ok, and how can I add a value to a stack that has elements?
-
-Well, thats quite easy, and can't show you in code how because then I will give you the full answer of this objective, but I can explain you.
-
-First, you need to check that in fact, the stack is not empty.
-
-Second, you must iterate over the elements of the stack, until you are in the last item.
-
-Third, the last item will be pointing to itself or to null, depending on which logic you decided. So you only need to put this line:
-
-```c++
-iterator->next = item;
-```
-
-With that line, the last item in our stack is now pointing to another item, so we have added successfully an item to our stack.
-
-### Objective 3. Pop!
-
-Lastly, we need to get the last item of our stack, in Objective 2. was detailed many of the tasks to do in order to add an item, so some part of the code will be reutilized to create the following function:
-
-```c++
-void pop(Stack &stack) {
-    // Validate that the stack is not empty
-
-    // Iterate in the elements until you get at the final element
-        // print the final element
-        // remove the final element
-        // the previous element -> next will be pointing now to null
-}
-```
-
-As you can see we have mostly all of the code, the element of code remaining is how to remove the element. For that we need another thing, a temporary element.
-
-```c++
-Stack iterator, temp;
-```
-
-This temporary element, will help us to update the semi final element to point to NULL, also we need a new instruction `delete`.
-
-```c++
-delete(iterator);
-```
-
-With the instruction above we will be able to delete from the memory the last element.
-
-With that in mind our pop function is defined by the following algorithm:
-
-1. While iterator != NULL
-    1. If iterator->next == iterator
-        1. If that was the only element in the stack
-            1. Stack = NULL
-        2. Else
-            1. temp->next = temp;
-        3. delete iterator
-        4. break
-    2. Else
-        1. temp = iterator
-    3. iterator = iterator->next
-
-### Objective 4. More Controls
-
-As the previous exercise we need the same logic of controlling the flow of data. so again you must complete the main function:
-
-```c++
-int main() {
-
-    int order;
-
-    do {
-        // Get Order from the user
-        scanf("%d", &order);
-
-        switch (order) {
-            case 1: // Use Push()
-                // ID = "ID" + index of item (Generate yourself)
-                // x = Get from user
-                // y = Get from user
-                break;
-            case 2: // Use Pop()
-                break;
-            default: // print "Unknown Order"
-                break;
+            // Put the node at the end of the stack
+            iterator->next = item;
         }
-    } while (order != 4);
 
-    return 0;
+        return true;
+    } catch (bad_alloc& ex) {
+        return false;
+    }
 }
+```
+
+Isn't pretty? The fragment of code above, can be considered the difficult way.
+
+Why? well you need to think, this stack is using the ->next to indicate the top of the stack. But in reality, we know that the top is what is at the highest position, but in code, it is really necessary to put the top at the end?
+
+If you are not getting the idea, think from another angle, will it be easy to put the first element as the top, and put the stack in the ->next of that element, once we get to the pop you will understand why it's more difficult on this way. But I think it would be great if you can build by yourself the easiest way, this is why I presented the hardest one, so you can think by yourself on these things that maybe are not wrong, but can be aborded in a different way.
+
+Also you must have noticed something whe are using `*&stack`, why? well think that with * we are declaring in some way a dynamic array, and you already know we use & to indicate that we are passing by reference.
+
+### Objective 3. Let's Pop and Roll
+
+Our pop function is the same as always, it must return a `struct node *item`, this item can be a valid one or can be NULL, if it's NULL this indicates that the item is not valid, and the stack is empty.
+
+Remember that with the following code, you must understand why it's the hardest one, maybe not in code, but in performance this can be very hard if the stack keeps increasing.
+
+```c++
+struct node * pop(struct node *&stack)
+{
+    if (stack == NULL) {
+        return stack;
+    }
+
+    // You already know that we need to iterate to the end of the stack to reach the top.
+    struct node *iterator = stack;
+    struct node *previous = NULL;
+
+    while (iterator->next != iterator) {
+        // We assign the previous to be the previous element
+        previous = iterator;
+        iterator = iterator->next;
+    }
+
+    // If our stack has only one element we set the stack to empty
+    if (stack == iterator) {
+        stack = NULL;
+    } else { // otherwise set the previous element to point to itself
+        previous->next = previous;
+    }
+
+    return iterator;
+}
+```
+
+You have already seen right? It's the hardest way because we need two iterators instead of none, using the beginning as the top will allow us to put the following line `stack = stack->next`, using the end as the top will force us to think in a way that we can let top - 1 element to point to itself on a pop.
+
+### Objective 4.- No more help, nono.
+
+In previous exercises I give you the main function to only add the functions that you will need to use, in this case I will only give you a few instructions.
+
+#### Tip. 1 - Declare the stack
+```c++
+struct node *stack = NULL;
+```
+
+#### Tip. 2 - Retrieve elements from the stack
+```c++
+struct node *item = pop(stack);
+```
+
+And that's all folk.
+
+### Objective 5. The easiest way - the path of the software engineer.
+
+As I told you before, there is an easy way to create a simply linked list stack, on this way you can ensure that you application will not lack in performance with the operations for push and pop.
+
+The only tip that I can provide you is the declaration of an structure than will help you when you are writing your code.
+
+```c++
+struct node {
+    int x;
+    node *down;
+};
+```
+
+Why `down`? well it's easy, what is below the item on the top? another `item`

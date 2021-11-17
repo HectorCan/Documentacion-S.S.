@@ -1,10 +1,10 @@
-# How to Solve - Dynamic Queues
+# How to Solve - Queues - Simply Linked Lists
 
-Queue with Simply Sentinel-Linked List
+## Mission 7 - Create a Queue with Simply Linked Lists
 
-**Description:** Make a program in C or C++ language that use the structures and functions of dynamic queues ADT to manage a set of points in the bidimensional plane.
+Make a program that simulates a Queue using Simply Linked Lists
 
-The **Point Entity** must have the following structure:
+As a recap, we have the TPoint Structure as following
 
 ```json
 { 
@@ -14,190 +14,117 @@ The **Point Entity** must have the following structure:
 }
 ```
 
-The code must have the following functions:
+We don't need any other structure, the difference is that in Mission 5.2 we use another structure as a controller for the Queue, but in this mission we only need the TPoint Structure.
 
-1. Add a Point
-2. Remove a Point
-3. Print the Point
-4. Clean the Queue
+### Exploration - Simply Linked Lists
 
-The program must have the following options:
+What is a Simply LInked List? Well, we can look at the following image as a reference.
 
-1. Insert a point in the Queue
-2. Dispatch a Point of the Queue (and Display It)
-3. Clean the Queue
-4. Exit
+As you can see is a list of items that are connected only on **one way**, also the last item can be pointing to itself (as in the image) or to NULL.
 
-## The Point Structure, Again...
+![Simple Linked List](./img/SimplyLinkedList.jpg)
 
-As you previously coded you have the code to instatiate an structure.
+You can see this structure as the same way you can see an array, but the greater difference is that this structure of data can let us create dynamic arrays, in other manner of saying. We can create a list of 100, 200 or 300 elements without changing a single line of code.
+
+This connection is to say, which element is after which element, and with that connection we can handle the simply linked list, to remove or add any element.
+
+But this interface has its limitations, as you will see while reading and in the following manuals.
+
+### Objective 1. STRUCTuring our Queue of Nodes
+
+For this example we will be using our dear node structure, the node will have the following structure:
+
+```json
+{// node
+    "x": 1
+}
+```
+
+In C++ we will need to structure this data, also we need to structure in a way so we can simply link this node to another. The result of our structure is the following:
 
 ```c++
-// Declare the Node
 struct node {
     int x;
-
-    // We need to simply link each node
-    struct node *next;
+    node * next;
 };
-
-// Secondly we declare another structure as a Queue
-typedef struct node *Queue;
-
-int main () {
-    Queue myQueue = NULL;
-
-    return 0;
-}
 ```
 
-Ok, now we are set and ready to start the challenge.
+Beautiful as always.
 
-## Houston, something is behind me
+### Objective 2. Stop PUSHing me!
 
-Queues, are another data structure, they are an ordered collection of elements in which we can delete elements at the start, or we can add elements to the end.
+If you remember the Queue to buy your lunch on high school, everyone will be pushing to be the first one.
 
-Nowadays this data structure is something that everyone is accostumed, i.e. when you buy in any Super Market you do a queue to pay, the first in the queue is the first to be dispatched, and when someone needs to pay he stars at the end of the Queue.
+Be glad, our queue will be only one way and nobody will push you.
 
-Queues are a data structure FIFO (First In First Out).
-
-For this moment the first thing that we need to do is to add an element to the end of the Queue. For that you must complete the following function:
+So, our queue needs a push function, as always the push function must return a boolean value that will be a flag to indicate if the value was correctly pushed into the queue.
 
 ```c++
-void push(Queue &myQueue, int n) {
-    // Create a new node and add it to myQueue
-}
-```
+using namespace std;
 
-In the function above there is two ways, you can use *next* to determine who is behind or you can use *next* to determine who is in front. As you can see the Queues are FIFO (First In First Out), so we can use the first element as the Head and the last element as the Tail, but can be reversed, the only difference is that *push* or *pop* one of them must iterate all elements.
-
-For this example we will use the first element as the Head, and the last element as the tail.
-
-First what we need is a function that determines if the Queue is empty:
-
-```c++
-bool isTail(Queue &myQueue)
+bool push (struct node *&queue, int x)
 {
-    // check if myQueue->next is the same as myQueue
+    try {
+        struct node *item = new node;
+        item->x = x;
+        item->next = item;
+
+        if (queue == NULL) {
+            queue = item;
+        } else {
+            struct node *iterator = queue;
+
+            while (iterator->next != iterator) {
+                iterator = iterator->next;
+            }
+
+            iterator->next = item;
+        }
+
+        return true;
+    } catch (bad_alloc& ex) {
+        return false;
+    }
 }
 ```
 
-Next, is a coding tip. One expression can substitute an if structure. Keep that in mind so you can write less code ;)
+Wait! is the same function that uses the difficult stack? Ding Ding Ding! Yes it is.
+The improper way of the stack, is the proper way of the queue.
+
+If you are wondering why, you must see the pop function. :)
+
+### Objective 3. It is beautiful
+
+As always the pop function should return the node, or null if the item is not a valid one.
 
 ```c++
-bool isTrue(int n) {
-    if (n > 1) {
-        return true;
+struct node * pop(struct node *&queue)
+{
+    if (queue == NULL) {
+        return queue;
     }
 
-    return false;
-}
+    struct node *item = queue;
 
-bool isTrue2(int n) {
-    return n > 1; // Return true if n > 1, otherwise return false.
-}
-```
+    if (queue->next != queue) {
+        queue = queue->next;
+    } else {
+        queue = NULL;
+    }
 
-Now you have a function that checks if in the Queue is the last element. Now we must work on how to add one element to the Queue.
-
-```c++
-void push(Queue &myQueue, int n) {
-    // We need an iterator and a item to store the N value
-    Queue iterator = myQueue, item = new (struct node);
-
-    // NOTE: As you remember, previously we initialize myQueue as NULL,
-    // We are using NULL ONLY to determine that the Queue is empty
-
-    // If myQueue is Empty
-    // --> myQueue will be the item
-    // If the Queue is not Empty
-    // --> Iterate until you reach the tail of the queue
-    // --> iterator->next will be the item
+    return item;
 }
 ```
 
-You have some pseudocode so you can fullfill this task, remember, you have a isTail function use it wisely.
+You see? This is why the Queue is the simplest one, our pop function doesn't need to iterate anything. We just need to validate if is the last element on the queue, if it is our queue returns to an empty indicator.
 
-## Popcorns DO POP!
+### Objective 4. Reusing our control function
 
-Now we have how to add an item to the Queue, but we need to dispatch the first element of the queue.
+This time there is no the code for the control, you must have learned through the copy and paste.
 
-Your first task is to print the first element, so complete the function below, there will not be any extra comments for this function, why? it's an easy task you only need to print.
+The control must be the following:
+1. Push
+2. Pop
+3. Exit
 
-```c++
-void printPoint(Queue &myQueue) {
-
-}
-```
-
-Now that you have how to print the element, we need to dispatch the element with the following function:
-
-```c++
-void pop(Queue &myQueue) {
-    // We need a temporal variable for the queue
-    Queue temp = myQueue;
-
-    // NOTE: It is set as the first element, because this will be the element to dispatch.
-
-    // If temp is Empty
-    // --> print "Queue is empty\n" and finish this function.
-
-    // If temp is not Empty
-    // --> If temp is the tail
-    // ---->  myQueue will be set as Empty
-    // --> If temp is not the tail
-    // ----> myQueue will be temp->next;
-    // --> print the temp
-    // --> delete temp
-}
-```
-
-Once you can do push, push, pop, pop, pop, you are a few steps nearby the end. The next you need to do is to clear all the queue without printing the values.
-
-## All Clear, Sir!
-
-For cleaning the Queue you need to complete the following function:
-```c++
-void cleanQueue(Queue &myQueue) {
-    Queue iterator = myQueue; // We need an iterator to dispatch all the items.
-
-    // if the iterator is Empty, we dont need to dispatch.
-
-    // If the iterator is not Empty
-    // --> Delete each element from start to tail
-
-    // Once you have deleted all the elements remember to set myQueue to empty.
-}
-```
-
-## Don't lose control
-
-Following code is a copy-paste, for you not to write (again).
-
-```c++
-int main() {
-    int order;
-
-    do {
-        // Get Order from the user
-        scanf("%d", &order);
-
-        switch (order) {
-            case 1: // Use Push()
-                break;
-            case 2: // Use Pop()
-                break;
-            case 3: // Use CleanQueue()
-                break;
-            default: // print "Unknown Order"
-                break;
-        }
-    } while (order != 4);
-
-    return 0;
-}
-```
-
-As you can see Queues, are simpler than Stacks, they don't need to be iterated twice.
-
-With all this, I only hope Good Luck For You!
+**NOTE**: In the exercises maybe are extra options, these options are quite easy once you understand, since these options are to print the item or the list of items. Quite easy, so in these manuals these functions are not included.
