@@ -1,180 +1,251 @@
-# How to Solve - Stacks - Simply Linked Lists
+# How to Solve - Stack - Simply Linked Lists
 
 ## Mission 6 - Create a Stack with Simply Linked Lists
 
-Make a program that simulates a stack using Simply Linked Lists
+Make a program that simulates a Stack using Simply Linked Lists
 
-This mission is the same as the Mission 5, but we are going to face the challenge of changing from one structure to another.
-
-As a recap, we have the TPoint Structure as following:
+The Structure required for acomplishing this Mission is the following.
 
 ```json
-// TPoint
-{
+{ 
     "ID": "P01",
-    "x": 1.3,
-    "y": 2.0
+    "x": 1.300, // 3 floating points.
+    "y": 1.250
 }
 ```
 
-We don't need any other structure, the difference is that in Mission 5 we use another structure as a controller for the Stack, but in this mission we only need the TPoint structure.
+As always, this guide will help you to accomplish this mission.
 
-### Exploration - Simply Linked Lists
+### Scout Boy Exploration - Simply Linked Lists
 
-What is a Simply LInked List? Well, we can look at the following image as a reference.
+What is Simply if not something easy? A Simply Linked List is a data structure that will help you to create dynamic lists. Also this structure will help you to understand the importance of the order, or the logic required to accomplish performance.
 
-As you can see is a list of items that are connected only on **one way**, also the last item can be pointing to itself (as in the image) or to NULL.
+You can see the following image to understand a Simply Linked List.
 
-![Simple Linked List](./img/SimplyLinkedList.jpg)
+![Simple Linked List](./img/simple-linked-list-01.png)
 
-You can see this structure as the same way you can see an array, but the greater difference is that this structure of data can let us create dynamic arrays, in other manner of saying. We can create a list of 100, 200 or 300 elements without changing a single line of code.
+As you can see you have a `centinel`, the `centinel` is an invalid object of the Simply Linked List, this object will help us to do insertions in the head or in the tail.
 
-This connection is to say, which element is after which element, and with that connection we can handle the simply linked list, to remove or add any element.
+In the image are two simple linked lists, the first one is with a centinel in the tail, and the other is with a centinel in the head. The great difference on where to put the centinel consists on the logic required to insert a new element, since is differente insert an element after the head, and insert an element before the tail.
 
-But this interface has its limitations, as you will see while reading and in the following manuals.
+In great resume the Simply Linked List are nodes that are connected between them in only **one way**, and let us iterato over the elements to reach the head or the tail.
 
+#### Objective 0. It's tutoring time!
 
-### Objective 1. Let's STRUCTure our stack of NODE
+![Tutoring time](./img/tutoring-time.png)
 
-For this example we will be working with nodes, the nodes will have the following structure:
+For this guide we will be creating a Stack for the following Point structure:
 
 ```json
-{// node
-    "x": 1
+{
+  "x": 1
 }
 ```
 
-In C++ we will need to structure this data, also we need to structure in a way so we can simply link this node to another. So the result is the following code:
+We want to achieve the most basic operations of a Stack.
+
+1. Create a Node for the Stack
+2. Initialize our Stack
+3. Insert a new Node to the Stack
+4. Pop a Point from the Stack
+
+#### Objective 1. Defining our structure
+
+We will be using the following template for the code session:
 
 ```c++
-struct node {
-    int x;
-    node *next;
-};
-```
+#include <iostream>
 
-Quite easy isn't?
-
-#### Pro-Coding Tip 101
-
-For this exercise, since the stack is dynamic, from one moment to another our stack can be full, this is because a computer have a limit on memory, if we add thousands and thousands of nodes, in one moment our code will fail since it will not be able to create a new node, so in the next objective we will create a node and validate the overflow of memory.
-
-Also since many internal functions are added on the standard namespace, it is possible that you don't want to write `std::some_function`, more disgusting if you have to write 100 times the sentence, so you can save some keystrokes using the following line of code:
-
-```c++
 using namespace std;
-```
 
-With this you can use cout or cin without writing `std::cout` or `std::cin`
-
-### Objective 2. Let's push a node.
-
-You must know that the push function returns an status, true or false, this status indicates if an element was inserted into the stack. We are working with dynamic stacks, so we can run out of memory, but to avoid our program from breaking itself, since it can have sensible data and we can't afford to lose that data, we need to try and catch the error.
-
-Our push function will be look like:
-
-```c++
-bool push(struct node *&stack, int x)
+int main()
 {
-    try {
-        // Create the node
-        struct node *item = new node;
-        item->x = x;
-        item->next = item; // points to itself
-
-        if (stack == NULL) {
-            stack = item;
-        } else {
-            // We need to iterate over the elements to reach the end of the stack
-            struct node *iterator = stack;
-
-            // If the following is not the same
-            while (iterator->next != iterator) {
-                iterator = iterator->next;
-            }
-
-            // Put the node at the end of the stack
-            iterator->next = item;
-        }
-
-        return true;
-    } catch (bad_alloc& ex) {
-        return false;
-    }
+  cout << "Hello World!" << endl;
+  return 0;
 }
 ```
 
-Isn't pretty? The fragment of code above, can be considered the difficult way.
-
-Why? well you need to think, this stack is using the ->next to indicate the top of the stack. But in reality, we know that the top is what is at the highest position, but in code, it is really necessary to put the top at the end?
-
-If you are not getting the idea, think from another angle, will it be easy to put the first element as the top, and put the stack in the ->next of that element, once we get to the pop you will understand why it's more difficult on this way. But I think it would be great if you can build by yourself the easiest way, this is why I presented the hardest one, so you can think by yourself on these things that maybe are not wrong, but can be aborded in a different way.
-
-Also you must have noticed something whe are using `*&stack`, why? well think that with * we are declaring in some way a dynamic array, and you already know we use & to indicate that we are passing by reference.
-
-### Objective 3. Let's Pop and Roll
-
-Our pop function is the same as always, it must return a `struct node *item`, this item can be a valid one or can be NULL, if it's NULL this indicates that the item is not valid, and the stack is empty.
-
-Remember that with the following code, you must understand why it's the hardest one, maybe not in code, but in performance this can be very hard if the stack keeps increasing.
+First we need to create the structure for the Point datatype.
 
 ```c++
-struct node * pop(struct node *&stack)
-{
-    if (stack == NULL) {
-        return stack;
-    }
-
-    // You already know that we need to iterate to the end of the stack to reach the top.
-    struct node *iterator = stack;
-    struct node *previous = NULL;
-
-    while (iterator->next != iterator) {
-        // We assign the previous to be the previous element
-        previous = iterator;
-        iterator = iterator->next;
-    }
-
-    // If our stack has only one element we set the stack to empty
-    if (stack == iterator) {
-        stack = NULL;
-    } else { // otherwise set the previous element to point to itself
-        previous->next = previous;
-    }
-
-    return iterator;
-}
+typedef struct Point {
+  int x;
+} Point;
 ```
 
-You have already seen right? It's the hardest way because we need two iterators instead of none, using the beginning as the top will allow us to put the following line `stack = stack->next`, using the end as the top will force us to think in a way that we can let top - 1 element to point to itself on a pop.
-
-### Objective 4.- No more help, nono.
-
-In previous exercises I give you the main function to only add the functions that you will need to use, in this case I will only give you a few instructions.
-
-#### Tip. 1 - Declare the stack
-```c++
-struct node *stack = NULL;
-```
-
-#### Tip. 2 - Retrieve elements from the stack
-```c++
-struct node *item = pop(stack);
-```
-
-And that's all folk.
-
-### Objective 5. The easiest way - the path of the software engineer.
-
-As I told you before, there is an easy way to create a simply linked list stack, on this way you can ensure that you application will not lack in performance with the operations for push and pop.
-
-The only tip that I can provide you is the declaration of an structure than will help you when you are writing your code.
+After creating our Point structure we need to create the Structure for each Node of the Stack.
 
 ```c++
-struct node {
-    int x;
-    node *down;
+struct Stack {
+  Point p;
+  Stack *next;
 };
 ```
 
-Why `down`? well it's easy, what is below the item on the top? another `item`
+#### Objective 2. Create a Node for the Stack
+
+What the? Are not we using a Point Structure? Yeah, but we are not storing only the value of x, imagine we are using the TPoint structure defined in the exercise, yes the one with ID, X and Y. We can put that values in the struct for the Stack, but when we need to use the data stored in the Stack node, we need to retrieve all the Stack node.
+
+And as you can guess, the stack node will be pointing to another nodes. 
+
+So Imagine that by a unaware use of the Node, someone ends erasing or changing the node, we can miss which node was pointing, we can loss tons of data.
+
+So that is the reason why we are separating the node from the element that we want to store. So, let's start!
+
+```c++
+Stack *CreateNode(Stack elem)
+{
+  Stack *aux = NULL;
+
+  // Check if we can create a new node
+  if ((aux = new Stack[1]) == NULL) {
+    return NULL;
+  }
+
+  // Set the values in the node
+  *(aux) = elem;
+
+  // The node will be pointing to itself
+  aux->next = aux;
+
+  return aux;
+}
+```
+
+As you can see the main objective of the function is try to create a node, if the node cannot be created return a NULL, otherwise return the new node with the elements that we need in the node.
+
+#### Objective 3. Initialize the Stack Centinel
+
+As you will see in the following code examples we will be using a centinel in the head. Why? You will see, that in operations like push or pop we can optimize the performance of our application by doing this.
+
+```c++
+bool CreateStack(Stack **head)
+{
+  Stack *CenHead;
+  Stack aux;
+
+  // Create a Head Centinel using a Stack item
+  CenHead = CreateNode(aux);
+  // If the Centinal cannot be created return false
+  if (CenHead == NULL) { return false; }
+
+  // The centinel will point to itself
+  CenHead->next = CenHead;
+
+  // Our head will be the Centinel
+  *(head) = CenHead;
+
+  return true;
+}
+```
+
+You can see that this is an easy example, with the Create Stack we are initializing our head centinel. With the centinel we will be able to insert elements.
+
+But remember, not always go as planned so you will need to validate that the centinel can be created.
+
+#### Objective 4. Push it in the top
+
+Our main goal is to achieve the following functionality, we need to put our element after the centinel, so we can have something like this:
+
+![Centinel put at the top](./img/centinel-put-top.png)
+
+You may be seeing that this is pretty similar to stacking elements to create a tower.
+
+For pushing an element into the stack we need to go a little deeper, we need to start with creating our element to insert, that is done using the following code:
+
+```c++
+Stack *head; 
+
+bool canBeCreated = CreateStack(&head);
+
+if (canBeCreated) {
+  Point p;
+  p.x = 2;
+
+  Stack elem;
+  elem.p = p;
+
+  // Push
+}
+```
+
+And only with that we have created a new element, but we need to push this element into the stack:
+
+```c++
+bool pushNode(Stack *head, Stack elem)
+{
+  Stack *newItem = NULL;
+
+  // We try to create a new node for the stack
+  if ((newItem = CreateNode(elem)) == NULL) {
+    return false;
+  }
+
+  // Check if there is an element in the stack aside of the centinel
+  if (head != head->next) {
+    // Connect new item with the previous item
+    newItem->next = head->next;
+  }
+
+  // Connect the centinel with the new element
+  head->next = newItem;
+
+  return true;
+}
+```
+
+And that's all, pretty easy isn't?
+
+BUT, there is another way to insert the element, you have seen the "performance" way, and this type of insertion is insertion on the head. There is another insertion type called insertion on the tail. And as you can guess, this insertion is done by connecting the last element to the new element (Yes, you need to iterate over all elements to reach the end of the stack).
+
+You can try if you want, but take into account that this will lead to bigger times on the insertion, well only if you have a big number of elements in the stack. If you only manage 5 elements it will be difficult to have that leak of performance.
+
+Ah and how can you use the pushNode()?
+
+```c++
+// ...Push
+bool canBeInserted = pushNode(head, elem));
+```
+
+#### Objective 5. The Claw!
+
+![The Claw](./img/centinel-pop-top.png)
+
+
+As always the pop function should return the point and a boolean to know if the item has been dispatched correctly.
+
+```c++
+Point popNode(Stack *head, bool *isValid)
+{
+  Stack *iterator = head->next;
+  Point elem; 
+
+  // Check if the item is not the centinel
+  *isValid = head != iterator->next;
+
+  // Get the element that you want to 
+  elem = iterator->p;
+
+  if (iterator != iterator->next) {   // If the item has a next
+    head->next = iterator->next;      // Centinel points to the item->next
+  } else {
+    head->next = head;                // Otherwise Centinel points to itself.
+  }
+
+  return elem;
+}
+```
+
+We need to check that our Point element is a valid one and not the centinel, also when dispatching elements we need to update the centinel pointer to know which element needsto point.
+
+#### Objective 6. It's control time!
+
+This time there is no the code for the control, you must have learned through the copy and paste.
+
+The control must be the following:
+1. Push
+2. Pop
+3. Clean Stack
+3. Exit
+
+**NOTE**: In the exercises maybe are extra options, these options are quite easy once you understand, since these options are to print the item or the list of items. Quite easy, so in these manuals these functions are not included.
