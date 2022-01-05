@@ -32,8 +32,6 @@ In great resume the Simply Linked List are nodes that are connected between them
 
 #### Objective 0. It's tutoring time!
 
-![Tutoring time](./img/tutoring-time.png)
-
 For this guide we will be creating a Stack for the following Point structure:
 
 ```json
@@ -118,30 +116,26 @@ As you can see the main objective of the function is try to create a node, if th
 
 As you will see in the following code examples we will be using a centinel in the head. Why? You will see, that in operations like push or pop we can optimize the performance of our application by doing this.
 
-```c++
-bool CreateStack(Stack **head)
+```c++ 
+int main()
 {
-  Stack *CenHead;
-  Stack aux;
+  Stack *CenHead = NULL;
+  Point elem;
 
-  // Create a Head Centinel using a Stack item
-  CenHead = CreateNode(aux);
-  // If the Centinal cannot be created return false
-  if (CenHead == NULL) { return false; }
+  // Try to create the Head centinel
+  if ((CenHead = CreateNode(elem)) == NULL) {
+    return 1;
+  } 
 
   // The centinel will point to itself
   CenHead->next = CenHead;
 
-  // Our head will be the Centinel
-  *(head) = CenHead;
-
-  return true;
+  
+  return 0;
 }
 ```
 
-You can see that this is an easy example, with the Create Stack we are initializing our head centinel. With the centinel we will be able to insert elements.
-
-But remember, not always go as planned so you will need to validate that the centinel can be created.
+You can see that this is an easy example, with the Create Node we are initializing our head centinel. With the centinel we will be able to insert elements. You don't know where is Create Node? don't worry that function will be covered in the next Objective.
 
 #### Objective 4. Push it in the top
 
@@ -154,16 +148,13 @@ You may be seeing that this is pretty similar to stacking elements to create a t
 For pushing an element into the stack we need to go a little deeper, we need to start with creating our element to insert, that is done using the following code:
 
 ```c++
-Stack *head; 
+int main() {
+  Stack *head; 
 
-bool canBeCreated = CreateStack(&head);
+  // .. initialize head
 
-if (canBeCreated) {
   Point p;
   p.x = 2;
-
-  Stack elem;
-  elem.p = p;
 
   // Push
 }
@@ -172,7 +163,7 @@ if (canBeCreated) {
 And only with that we have created a new element, but we need to push this element into the stack:
 
 ```c++
-bool pushNode(Stack *head, Stack elem)
+bool pushNode(Stack *head, Point elem)
 {
   Stack *newItem = NULL;
 
@@ -180,6 +171,8 @@ bool pushNode(Stack *head, Stack elem)
   if ((newItem = CreateNode(elem)) == NULL) {
     return false;
   }
+
+  newItem->p = elem;
 
   // Check if there is an element in the stack aside of the centinel
   if (head != head->next) {

@@ -32,8 +32,6 @@ In great resume the Simply Linked List are nodes that are connected between them
 
 #### Objective 0. It's tutoring time!
 
-![Tutoring time](./img/tutoring-time.png)
-
 For this guide we will be creating a Queue for the following Point structure:
 
 ```json
@@ -119,29 +117,24 @@ As you can see the main objective of the function is try to create a node, if th
 As you will see in the following code examples we will be using a centinel in the head. Why? You will see, that in operations like push or pop we can optimize the performance of our application by doing this.
 
 ```c++
-bool CreateQueue(Queue **head)
+int main()
 {
-  Queue *CenHead;
-  Queue aux;
+  Queue *CenHead = NULL;
+  Point elem;
 
-  // Create a Head Centinel using a Queue item
-  CenHead = CreateNode(aux);
-  // If the Centinal cannot be created return false
-  if (CenHead == NULL) { return false; }
+  // Try to create the centinel
+  if ((CenHead = CreateNode(elem)) == NULL) {
+    return 1;
+  }
 
   // The centinel will point to itself
   CenHead->next = CenHead;
 
-  // Our head will be the Centinel
-  *(head) = CenHead;
-
-  return true;
+  return 0;
 }
 ```
 
-You can see that this is an easy example, with the Create Queue we are initializing our head centinel. With the centinel we will be able to insert elements.
-
-But remember, not always go as planned so you will need to validate that the centinel can be created.
+You can see that this is an easy example, with the Create Node we are initializing our head centinel. With the centinel we will be able to insert elements. You don't know where is Create Node? don't worry that function will be covered in the next Objective
 
 #### Objective 4. Push it in the tail
 
@@ -154,16 +147,13 @@ You may be seeing that this is similar to the super market Queue.
 For pushing an element into the Queue we need to go a little deeper, we need to start with creating our element to insert, that is done using the following code:
 
 ```c++
-Queue *head; 
+int main() {
+  Queue *head; 
 
-bool canBeCreated = CreateQueue(&head);
+  // .. initialize head
 
-if (canBeCreated) {
   Point p;
   p.x = 2;
-
-  Queue elem;
-  elem.p = p;
 
   // Push
 }
@@ -172,7 +162,7 @@ if (canBeCreated) {
 And only with that we have created a new element, but we need to push this element into the Queue:
 
 ```c++
-bool pushNode(Queue *head, Queue elem)
+bool pushNode(Queue *head, Point elem)
 {
   Queue *newItem = NULL, *iterator = head->next;
 
@@ -181,6 +171,8 @@ bool pushNode(Queue *head, Queue elem)
     return false;
   }
 
+  newItem->p = elem;
+  
   // Iterate over the elements until you reach the end
   while (iterator->next != iterator) {
     iterator = iterator->next;
