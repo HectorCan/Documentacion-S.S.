@@ -517,8 +517,8 @@
     },
     {
       "type": "text",
-      "version": 222,
-      "versionNonce": 2066979040,
+      "version": 223,
+      "versionNonce": 2135360845,
       "isDeleted": false,
       "id": "AynGNRv4DAxWhdJrBuW9Q",
       "fillStyle": "hachure",
@@ -538,7 +538,8 @@
       "strokeSharpness": "sharp",
       "boundElementIds": [
         "EbWiwHZ2nQKf2mHb2yTqp",
-        "tHqqfOdmW9ApdvIqFXQ7v"
+        "tHqqfOdmW9ApdvIqFXQ7v",
+        "v1Q0J_M8R45ruQDye6ZUt"
       ],
       "fontSize": 20,
       "fontFamily": 1,
@@ -1766,8 +1767,8 @@
     },
     {
       "type": "arrow",
-      "version": 156,
-      "versionNonce": 1140512347,
+      "version": 217,
+      "versionNonce": 857818723,
       "isDeleted": false,
       "id": "v1Q0J_M8R45ruQDye6ZUt",
       "fillStyle": "hachure",
@@ -1776,8 +1777,8 @@
       "roughness": 1,
       "opacity": 100,
       "angle": 0,
-      "x": 347.8713440266632,
-      "y": 390.5839606703395,
+      "x": 223.8713440266632,
+      "y": 303.5839606703395,
       "strokeColor": "#000000",
       "backgroundColor": "transparent",
       "width": 5.081124201187038,
@@ -1786,15 +1787,11 @@
       "groupIds": [],
       "strokeSharpness": "round",
       "boundElementIds": [],
-      "startBinding": {
-        "elementId": "BeTJoQ09TN3r75sUB-pWW",
-        "focus": -0.01271968262513669,
-        "gap": 8.58396067033948
-      },
+      "startBinding": null,
       "endBinding": {
-        "elementId": "qHS1nM7a6rRxejTiyu1BK",
-        "focus": -0.031000043567823727,
-        "gap": 5.059957253932964
+        "elementId": "AynGNRv4DAxWhdJrBuW9Q",
+        "focus": 0.8559227024474135,
+        "gap": 10.559957253932964
       },
       "points": [
         [
@@ -1854,8 +1851,8 @@
     },
     {
       "type": "text",
-      "version": 38,
-      "versionNonce": 966215541,
+      "version": 100,
+      "versionNonce": 1262850381,
       "isDeleted": false,
       "id": "BeTJoQ09TN3r75sUB-pWW",
       "fillStyle": "hachure",
@@ -1864,8 +1861,8 @@
       "roughness": 1,
       "opacity": 100,
       "angle": 0,
-      "x": 322,
-      "y": 357,
+      "x": 198,
+      "y": 279,
       "strokeColor": "#000000",
       "backgroundColor": "transparent",
       "width": 46,
@@ -1873,9 +1870,7 @@
       "seed": 1769253088,
       "groupIds": [],
       "strokeSharpness": "sharp",
-      "boundElementIds": [
-        "v1Q0J_M8R45ruQDye6ZUt"
-      ],
+      "boundElementIds": [],
       "fontSize": 20,
       "fontFamily": 1,
       "text": "head",

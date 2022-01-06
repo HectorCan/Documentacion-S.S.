@@ -120,22 +120,20 @@ As you will see in the following code examples we will be using a centinel in th
 int main()
 {
   Stack *CenHead = NULL;
-  Point elem;
 
   // Try to create the Head centinel
-  if ((CenHead = CreateNode(elem)) == NULL) {
+  if ((CenHead = CreateNode(*(CenHead))) == NULL) {
     return 1;
   } 
 
   // The centinel will point to itself
   CenHead->next = CenHead;
 
-  
   return 0;
 }
 ```
 
-You can see that this is an easy example, with the Create Node we are initializing our head centinel. With the centinel we will be able to insert elements. You don't know where is Create Node? don't worry that function will be covered in the next Objective.
+You can see that this is an easy example, with the Create Node we are initializing our head centinel. With the centinel we will be able to insert elements.
 
 #### Objective 4. Push it in the top
 
@@ -168,7 +166,7 @@ bool pushNode(Stack *head, Point elem)
   Stack *newItem = NULL;
 
   // We try to create a new node for the stack
-  if ((newItem = CreateNode(elem)) == NULL) {
+  if ((newItem = CreateNode(*(newItem))) == NULL) {
     return false;
   }
 

@@ -120,10 +120,9 @@ As you will see in the following code examples we will be using a centinel in th
 int main()
 {
   Queue *CenHead = NULL;
-  Point elem;
 
   // Try to create the centinel
-  if ((CenHead = CreateNode(elem)) == NULL) {
+  if ((CenHead = CreateNode(*(CenHead))) == NULL) {
     return 1;
   }
 
@@ -134,7 +133,7 @@ int main()
 }
 ```
 
-You can see that this is an easy example, with the Create Node we are initializing our head centinel. With the centinel we will be able to insert elements. You don't know where is Create Node? don't worry that function will be covered in the next Objective
+You can see that this is an easy example, with the Create Node we are initializing our head centinel. With the centinel we will be able to insert elements.
 
 #### Objective 4. Push it in the tail
 
@@ -167,7 +166,7 @@ bool pushNode(Queue *head, Point elem)
   Queue *newItem = NULL, *iterator = head->next;
 
   // We try to create a new node for the Queue
-  if ((newItem = CreateNode(elem)) == NULL) {
+  if ((newItem = CreateNode(*(newItem))) == NULL) {
     return false;
   }
 
