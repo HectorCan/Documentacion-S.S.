@@ -2,41 +2,42 @@
 
 ## Mission 8 - Create a  Double Linked List
 
-Make a program that simulates a Double Linked List
+For this Mission you will accomplish the following:
 
-For this task you will use the following structure:
+* Make a program that simulates a Double Linked List
+
+The Program should consist of the following instructions:
+
+1. Insert node (This can be done inserting on the head or in the tail)
+2. Insert node in Ascending Order
+3. Print the List
+4. Clear the List
+
+For this case you will be using the following structure as the data in the node:
 
 ```json
-{
-    "value": 1.300,
+{// Point
+  "value": 1.300,
 }
 ```
-
-Each time you insert one element you should have the list in ascendant order. So the expected result after putting three elements i.e. values 8, 5, 10, is to have the following structure:
-
-```json
-{
-    {
-        "value": 5,
-    },
-    {
-        "value": 8,
-    },
-    {
-        "value": 10
-    }
-}
-```
-
-Keep the previous structure as an example of which order must be, not how the data will be in reality.
 
 ### Exploration - Double Linked Lists
 
-As you should remember Simply Linked Lists are an structure that connects one data structure with another data structure of the same type. With this Link you know which element is the following.
+As you must remeber Simply Linked Lists are a structure that links one data node with another data node. So you have something like the following image:
 
-But as you can see in the previous exercises we don't know which element is behind. Knowin which element is behind helps us to update the semifinal element to act as the final element (point towards itself). Otherwise you need to keep a control for the previous element.
+![Simple Linked List](./img/simplylinkedlist.png)
 
-You can define a double linked list like the following:
+With this kind of structure you should realize by now, that if you want to insert at the end of the list, you must iterate over all the elements to reach the last element. That solution can go fine with a low number of elements, but let's say that we have about 1 million elements, it can take many seconds just to reach the end.
+
+Futhermore this can be solved using two centinels:
+
+![Double Linked List](./img/doublelinkedlist.png)
+
+Using two centinels allow us to remove the iteration over all the elements. With this we can take the tail and insert a new element before the centinel. The same goes with the next element.
+
+There is also another capability we achieve using double linked lists, using simply linked list we can know what element whas the following but not the previous. Using double linked list we know the next and the previous element.
+
+The structure used for the Double linked is the following
 
 ```json
 {
@@ -45,8 +46,6 @@ You can define a double linked list like the following:
     "previous": *,
 }
 ```
-
-As you can see this structure will help us to order the elements that will be inserted in the list.
 
 ### Objective 1.- Let's structure our new Stack
 
@@ -61,17 +60,15 @@ As always we will be using our dear node structure:
 With that our code will look like this:
 
 ```c++
-typedef struct point {
+typedef struct Point {
     float value = 0;
-} point;
+} Point;
 
-struct node {
-    point p;
-    struct node * next = NULL;
-    struct node * previous = NULL;
-};
-
-typedef struct node* List;
+typedef struct Node {
+    Point p;
+    struct Node *next;
+    struct Node *prev;
+} Node;
 ```
 
 First we will explain the first block, the first block refers to the element that we are storing in our list. Our element is a defined type, so this "point" can have other parameters, like an ID, or some Weight.
@@ -80,121 +77,220 @@ The following block refers to our double linked list structure. This structure w
 
 ### Objective 2. Adding more nodes
 
-Remember, we want our points ordered by value in ascendant. As always we want to know if we can add a new node.
+We are working with unknown amount of memory we need to check if we can create an element before trying to insert into the double linked list.
 
 ```c++
-bool createListItem(List &myList);
-bool add(List &myList, point au);
-bool isEmpty(List &myList);
+// Function that creates a node
+Node *CreateNode(Node elem);
 
-bool createListItem(List &myList)
+int main()
 {
-    List item = new (struct node);
-    item->next = item;
-    item->prev = item;
+  // Example how to initialize the head and tail
+  Node *head; Node *tail;
 
-    myList = item;
+  if ((head = CreateNode(*(head))) == NULL) {
+    return 1;
+  }
 
-    if (myList == NULL) {
-        return false;
-    }
+  if ((tail = CreateNode(*(head))) == NULL) {
+    return 1;
+  }
 
-    return true;
+  head->prev = head;
+  head->next = tail;
+  tail->prev = head;
+  tail->next = tail;
 }
 
-bool isEmpty(List &myList)
+/**
+ * The following function creates a node for the double linked list
+ */
+Node *CreateNode(Node elem)
 {
-    if (myList == NULL || myList->next == myList) {
-        return true;
-    }
+  // Try to allocate some memory for the element
+  Node *aux = NULL;
+  if ((aux = new Node[1]) == NULL) {
+    return NULL;
+  }
 
+  // Link the node with itself
+  *(aux) = elem;
+  aux->next = aux;
+  aux->prev = aux;
+
+  return aux;
+}
+```
+
+### Objective 3. Inserting Points
+
+On this case we need to insert a point element into our double linked list.
+
+For doing this we need two kinds of insertion:
+
+1. Insertion on the head. ![Insertion on the head](./img/insertionhead.png)
+2. Insertion on the tail. ![Insertion on the tail](./img/insertiontail.png)
+
+```c++
+bool insert(Node *head, Node *tail, Point elem, bool type);
+
+int main()
+{
+  // ...
+
+  // Example:
+  Point p01;
+  p01.value = 1.300;
+
+  // Insert after the head
+  if (insert(head, tail, p01, true)) {
+    cout << "inserted on head" << endl;
+  }
+
+  // insert before the tail
+  if (insert(head, tail, p01, false)) {
+    cout << "inserted on tail" << endl;
+  }
+}
+
+/**
+ * Function to insert a Point in the head or tail
+ */
+bool insert(Node *head, Node *tail, Point elem, bool type)
+{
+  // Try to reserve memory for the node
+  Node *newItem;
+  if ((newItem = CreateNode(*(newItem))) == NULL) {
     return false;
+  }
+
+  // Insert the Point into the value
+  newItem->p = elem;
+  newItem->prev = newItem;
+  newItem->next = newItem;
+
+  // Insert after the head
+  if (type) {
+    newItem->next = head->next;
+    newItem->prev = head;
+  } 
+  // Insert before the tail
+  else {
+    newItem->next = tail;
+    newItem->prev = tail->prev;
+  }
+
+  // Link the previous and next element with the current element.
+  newItem->prev->next = newItem;
+  newItem->next->prev = newItem;
+
+  return true;
 }
 
-bool add(List &myList, point au)
-{
-    List iterator = myList, item;
-
-    if (!createListItem(item)) {
-        return false;
-    }
-
-    item->p = au;
-
-    if (isEmpty(myList)) {
-        myList = item;
-    } else {
-        // Iterate until the current element is higher than 
-        // the element to add
-        // OR when you reach the end
-        while (iterator->p->value < item->p->value && iterator->next != iterator) {
-            iterator = iterator->next;
-        }
-
-        // The current element is higher than the element to add
-        if (iterator->p->value <= item->p->value) {
-            // put after iterator
-            if (iterator->next != iterator) {
-                item->next = iterator->next;
-            }
-
-            iterator->next = item;
-            item->prev = iterator;
-        } else {
-            // put before iterator
-            if (iterator->prev != iterator) {
-                item->prev = iterator->prev;
-            }
-
-            iterator->prev = item;
-            item->next     = iterator;
-        }
-    }
-
-    return true;
-}
 ```
 
-Kind of messy right? On this case is better if you have a notepad with you, so you can test manually if the direction that you are creating is the correct.
+As you can see it's pretty easy to understand what are we trying to achieve.
 
-### Objective 3. I want to see the order!
+### Objective 4. I need some order...
 
-We need our beloved print function to be sure that we are adding new values in the correct order;
+In some cases we may need that our elements keep in order, but don't think that this program will always insert in order. As you must know using insert function we only insert on the head or tail. So even if we try to insert in order the elements will never be in the order.
+
+![Ordered Insertion](./img/insertionorder.png)
 
 ```c++
-void print(point *sp);
-void printAll(List &myList);
+bool insertedOrder(Node *head, Point elem);
 
-void print(point *sp)
+int main()
 {
-    printf("value: %.2f\n", sp->value);
+  // ...
+
+  // Example:
+  Point p01, p02, p03, p04;
+  p01.value = 4.000;
+  p02.value = 2.000;
+  p03.value = 1.000;
+  p04.value = 6.000;
+
+  insertedOrder(head, p01);
+  insertedOrder(head, p02);
+  insertedOrder(head, p03);
+  insertedOrder(head, p04);
 }
 
-void printAll(List &myList)
+bool insertedOrder(Node *head, Point elem)
 {
-    List iterator = myList;
+  // Try to allocate memory
+  Node *newItem;
+  if ((newItem = CreateNode(*(newItem))) == NULL) {
+    return false;
+  }
 
-    if (!isEmpty(myList)) {
-        while (iterator->next != iterator) {
-            print(iterator->p);
-            iterator->next = iterator;
-        }
+  // Insert point in node
+  newItem->p = elem;
+  newItem->prev = newItem;
+  newItem->next = newItem;
 
-        print(iterator->p);
-    }
+  Node *it = head->next;
+
+  // Do until you reach the tail centinel and
+  // until the current node has less value than the new node
+  while (it->next->next != it->next && it->p.value < newItem->p.value) {
+    it = it->next;
+  }
+
+  // Check if we need to insert before or after the iterator.
+  bool insertBehind = (it->next == it) || (it->next != it && it->p.value > newItem->p.value);
+
+  if (insertBehind) {
+    newItem->next = it;
+    newItem->prev = it->prev;
+  } else {
+    newItem->next = it->next;
+    newItem->prev = it;
+  }
+ 
+  newItem->prev->next = newItem;
+  newItem->next->prev = newItem;
+
+  return true;
 }
 ```
 
-Maybe we lost some lines of code with this implementation, but its easier to understand what are trying to achieve.
+### Objective 5. What we did?
 
-### Objective 4. 3R <3
+Maybe you are testing the examples to see if the program works, but you don't know if the program is working correctly. We need a way to tell if the elements are being inserted in the position where is supposed to be.
 
-Redo, Reuse or Recycle.
+For that we need a Print function so we can have a better idea of what are we doing.
 
-Our control (main function) should contain the following instructuions:
+```c++
+void Print(Node *head);
 
-1. Add
-2. List
-3. Exit
+/**
+ * Function that prints a list of elements
+ */
+void Print(Node *head)
+{
+  cout << "------------" << endl;
+  Node *iterator = head->next;
 
-**NOTE**: In the exercises maybe are extra options, these options are quite easy once you understand the previous code, also these options tend to be print an item or a list of items. Quite easy, there is no need for being included in the manual.
+  while (iterator->next != iterator->next->next) {
+    cout << iterator->p.x << endl;
+    iterator = iterator->next;
+  }
+
+  if (head != iterator) {
+    cout << iterator->p.x <<endl;
+  }
+}
+```
+
+### Objective 6. Abort the mission
+
+Yes as you have guessed we need a way to remove all the elements. And this task will be given to you.
+
+1. For all the elements after the head until you reach the tail
+    1. remove the element
+2. head->next = tail;
+3. tail->prev = head;
+
+After this, you can complete the assignature, I wish you good luck!
