@@ -47,10 +47,13 @@ To make the hash function we use Sumatory of the ASCii id letters in the string 
 
 ### Search 
 
-?? 
+If you want to search, you should use the HASH Function and then search in the queue using the specific index.
 
 ```C++
 { 
-// 
+int index = HashFunc(x);  //Compute the index by using the function
+
+//Search the linked list at that specific index
+
 }
 ```
