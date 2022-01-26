@@ -6,7 +6,7 @@ Calculate the function $e^x$ using Taylor's Series Expansion.
 
 The function $e^x$ is given by:
 
-$e^x = 1 + x + $ $x^2 \over 2! $ $ + ... + $ $x^n \over n!$
+$e^x = 1 + x + {x^2\over 2!} + {...} + {x^n \over n!} $
 
 ### Objective 1 - Start from the basics
 

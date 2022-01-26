@@ -232,23 +232,13 @@ bool insertedOrder(Node *head, Point elem)
 
   Node *it = head->next;
 
-  // Do until you reach the tail centinel and
-  // until the current node has less value than the new node
-  while (it->next->next != it->next && it->p.value < newItem->p.value) {
+  // until reach of the tail centinel
+  while (it->next != it && it->p.x < newItem->p.x) {
     it = it->next;
   }
-
-  // Check if we need to insert before or after the iterator.
-  bool insertBehind = (it->next == it) || (it->next != it && it->p.value > newItem->p.value);
-
-  if (insertBehind) {
-    newItem->next = it;
-    newItem->prev = it->prev;
-  } else {
-    newItem->next = it->next;
-    newItem->prev = it;
-  }
- 
+  
+  newItem->next = it;
+  newItem->prev = it->prev;
   newItem->prev->next = newItem;
   newItem->next->prev = newItem;
 
