@@ -158,8 +158,6 @@ Person search(List *head, bool *isValid, string key)
   *isValid = iterator != head;
   elem = iterator->person;
 
-  // TODO: Check if pop is required.
-
   return elem;
 }
 ```
