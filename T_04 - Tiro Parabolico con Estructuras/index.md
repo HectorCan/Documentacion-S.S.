@@ -96,9 +96,7 @@ As you can see in the example above, it's just the definition of many data types
 
 Now, we can talk about the problem. **Projectile motion** is the *motion* of an object thrown or projected into the air, subject to only the acceleration of gravity. The object is called a *projectile*, and his path is called *trajectory*.
 
-The gravity constant is defined by $9.80665m/s^2$
-
-**{Insertar Imagen sobre tiro parabolico}**
+The gravity constant is defined by $9.8 m/s^2$
 
 We will not deepen in projectile motion, so we will provide you all the required formulas.
 
