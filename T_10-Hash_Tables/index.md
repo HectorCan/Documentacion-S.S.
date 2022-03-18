@@ -55,8 +55,6 @@ And that's all for an explanation for Hash Tables, that can be resumed in the fo
 
 ![Hash Resume](./img/hash-resume.png)
 
-0 y 1 no son guarda elementos Jorge
-
 **NOTE**: Don't forget the image only explains what usually does the Hash table, not how to prevent collision.
 
 ## Objectives
