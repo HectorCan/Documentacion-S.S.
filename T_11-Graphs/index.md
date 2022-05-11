@@ -140,6 +140,82 @@ int main() {
 
 With all this now you have a graph representation. So you can start working on some Algorithms.
 
+### BFS (Breadth-First Search)
+
+This algorithm is very simple to achieve, the main goal of this algorithm is to print all the graph vertices based on the level of each one, for example, taking for example the nodes of a tree, you will print the root, then print the elements in the following level, and so on.
+
+The Algorithm is the following:
+
+#### BFS (G, s)
+
+1. **for** each vertex $u \in G.V - {s}$
+    1. color[u]     = WHITE
+    2. distances[u] = $\infty$
+    3. parent[u]    = NIL
+2. color[s]     = GRAY
+3. distances[s] = 0
+4. parent[s]    = NIL
+5. $\varrho = 0$
+6. ENQUEUE($\varrho$, s)
+7. **while** $\varrho != 0$
+    1. u = DEQUEUE($\varrho$)
+    2. **for** each $v \in G.Adj[u]$
+        1. **if** colors[v] == WHITE
+            1. colors[v] = GRAY
+            2. distances[v] = distances[u] + 1
+            3. parent[v]    = u
+            4. ENQUEUE($\varrho$, v)
+    3. color[u] = BLACK
+
+See the following image so you can understand better:
+
+![BFS Step By Step](./img/g-6.png)
+
+In the previous image you can see how the algorithm works, also you can notice? The answer for bfs is in the queue, for each DEQUEUE you do, you can print the node so effectively your answer would be:
+
+```
+S V R T W U
+```
+
+Note that this is an example, you would have a contact matrix to do this, so the answer of which node you will ENQUEUE first will be based on the row of the matrix.
+
+As you can see this is very simple and can be handled directly using 3 arrays, to have control of the statuses of the vertices.
+
+This algorithm is very simple so no code will be provided.
+
+You only **knockout** will be, get the adjacents of each node, but remember, your contact matrix has the answer, you just need to know which vertex in the array you should send.
+
+### DFS (Depth-First Search)
+
+Depth-First Search is managed by the next two functions. As you can see there is two functions since we cannot be sure that an existent vertex is linked to another vertex, for example a disconnected graph, to visit all the nodes.
+
+DFS(G):
+1. **for** each vertex $u \in G.V$
+    1. color[u] = WHITE
+    2. parents[u] = NIL
+2. time = 0
+3. **for** each vertex $u \in G.V$
+    1. **if** color[u] == WHITE
+        1. DFS-VISIT(G, u)
+
+DFS-VISIT(G, u):
+1. time = time + 1
+2. distances[u] = time
+3. color[u] = GRAY
+4. **for** each $v \in G.Ajd[u]$
+    1. **if** color[v] == WHITE
+        1. parents[v] = u
+        2. DFS-VISIT(G, v)
+5. color[u] = BLACK
+6. time = time + 1
+7. finales[u] = time
+
+Also you can see that in DFS-VISIT we save time two times, one **distances** is used for storing the time it started and **finales** is used for storing the time it finished.
+
+See the following image for a brief example:
+
+![DFS Step by Step](./img/g-7.png)
+
 ### Dijkstra
 
 We will start defining **Greedy Algorithm** is a simple, intuitive algorithm that is used in optimization problems. The algorithm tries to find the overall optimal way to solve the problem.
